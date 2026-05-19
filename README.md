@@ -1,6 +1,7 @@
 # AutoWOD
 
 [![Daily Reservation](https://github.com/RubenGlez/autowod/actions/workflows/daily-reservation.yml/badge.svg)](https://github.com/RubenGlez/autowod/actions/workflows/daily-reservation.yml)
+[![CI](https://github.com/RubenGlez/autowod/actions/workflows/ci.yml/badge.svg)](https://github.com/RubenGlez/autowod/actions/workflows/ci.yml)
 
 Automatically books your workout sessions on [WODBuster](https://wodbuster.com/) — the booking platform used by many CrossFit gyms. Once set up, it runs every day in the cloud so you never have to worry about grabbing a spot.
 
@@ -144,7 +145,7 @@ This books everything in one go.
 
 - Your email, password, and API key are stored as encrypted GitHub secrets — only your workflow can read them
 - GitHub Actions is free for public repositories
-- 2Captcha costs roughly $0.001 per run — less than $1/month for daily bookings
+- 2Captcha costs roughly $0.001 per solve. The bot skips the CAPTCHA entirely on runs where all sessions are already booked, so most daily runs are free
 
 ---
 
