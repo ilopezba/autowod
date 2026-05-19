@@ -69,7 +69,7 @@ export function allDatesCovered(
   return dates.length > 0 && dates.every(d => TERMINAL.includes(state[d]));
 }
 
-function terminalStatusFromResult(
+export function terminalStatusFromResult(
   result: ReservationResult
 ): TerminalBookingStatus | null {
   const { state, success } = result;

@@ -1,3 +1,4 @@
+/* eslint-env browser */
 console.clear = () => console.log("Console was cleared");
 const interval = setInterval(() => {
   if (window.turnstile) {

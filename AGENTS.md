@@ -1,3 +1,1 @@
-# AGENTS.md
-
-See [CLAUDE.md](./CLAUDE.md) for project instructions.
+See [CLAUDE.md](./CLAUDE.md)
