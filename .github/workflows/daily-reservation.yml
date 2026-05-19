@@ -64,6 +64,15 @@ jobs:
       - name: 🌐 Install Chrome for Puppeteer
         run: pnpm exec puppeteer browsers install chrome
 
+      - name: 📋 Restore booking state
+        id: booking-state-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: booking-state.json
+          key: booking-state-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            booking-state-${{ runner.os }}-
+
       - name: 🎯 Run booking script
         env:
           # Secrets (sensitive — set in Settings → Secrets and variables → Actions → Secrets tab)
@@ -81,3 +90,10 @@ jobs:
           SUNDAY: ${{ vars.SUNDAY }}
           AVAILABLE_DAYS: ${{ inputs.available_days || vars.AVAILABLE_DAYS }}
         run: pnpm start
+
+      - name: 💾 Save booking state
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: booking-state.json
+          key: booking-state-${{ runner.os }}-${{ github.run_id }}

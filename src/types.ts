@@ -17,10 +17,19 @@ export type WeekDay =
 export interface ReservationPreferences
   extends Record<WeekDay, string | null> {}
 
+export type TerminalBookingStatus =
+  | 'booked'
+  | 'waitlisted'
+  | 'finished'
+  | 'different-time';
+
+export type BookingState = Record<string, TerminalBookingStatus>;
+
 export interface ReservationResult {
   success: boolean;
   message: string;
   weekDay: string;
+  date?: string;
   time?: string;
   state?: ButtonText;
 }

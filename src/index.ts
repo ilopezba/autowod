@@ -3,6 +3,13 @@ import { login } from './services/auth';
 import { goToReservations, processReservations } from './services/reservation';
 import { solveCaptchaFlow } from './services/captcha';
 import {
+  allDatesCovered,
+  getUpcomingBookableDates,
+  loadState,
+  saveState,
+  updateState,
+} from './services/state';
+import {
   isCI,
   baseUrl,
   email,
@@ -34,6 +41,16 @@ function validateConfig() {
 
 async function main() {
   validateConfig();
+
+  const state = loadState();
+  const upcomingDates = getUpcomingBookableDates();
+  if (allDatesCovered(state, upcomingDates)) {
+    console.log(
+      `✅ All upcoming sessions already handled (${upcomingDates.join(', ')}) — skipping run, no CAPTCHA needed.`
+    );
+    return;
+  }
+
   const browser = await launch({
     headless: isCI,
     slowMo: isCI ? 0 : 50,
@@ -65,7 +82,8 @@ async function main() {
     await goToReservations(page);
 
     console.log('Processing reservations...');
-    await processReservations(page, reservationsPreferences);
+    const dayResults = await processReservations(page, reservationsPreferences);
+    saveState(updateState(state, dayResults.map(({ result }) => ({ date: result.date, result }))));
   } catch (error) {
     console.error(
       'Error in the script:',

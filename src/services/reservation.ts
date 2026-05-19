@@ -64,6 +64,11 @@ export async function getDateFromUrl(page: Page): Promise<string> {
   }).format(new Date(Number(weekDayInSeconds) * 1000));
 }
 
+export function getISODateFromUrl(page: Page): string {
+  const seconds = page.url().split('=')[1];
+  return new Date(Number(seconds) * 1000).toISOString().split('T')[0];
+}
+
 async function findReservationButton(
   page: Page,
   reservationKey: string,
@@ -98,6 +103,7 @@ export async function makeReservation(
 ): Promise<ReservationResult> {
   const { time, className } = parsePreferenceValue(preference);
   const weekDay = await getWeekDayFromUrl(page);
+  const date = getISODateFromUrl(page);
   const pageTitle = await page.$('.mainTitle');
   const pageTitleText = (await pageTitle?.evaluate(el => el.textContent)) ?? '';
 
@@ -106,6 +112,7 @@ export async function makeReservation(
       success: false,
       message: `📅 No time scheduled for ${weekDay}s`,
       weekDay,
+      date,
     };
   }
 
@@ -144,6 +151,7 @@ export async function makeReservation(
     success: true,
     message: '',
     weekDay,
+    date,
     time,
     state,
   };
@@ -232,7 +240,7 @@ function writeJobSummary(
 export async function processReservations(
   page: Page,
   preferences: ReservationPreferences
-): Promise<void> {
+): Promise<Array<{ weekDay: string; result: ReservationResult }>> {
   const dayResults: Array<{ weekDay: string; result: ReservationResult }> = [];
   let booked = 0;
   let waitlisted = 0;
@@ -269,4 +277,5 @@ export async function processReservations(
   );
 
   writeJobSummary(dayResults, { booked, waitlisted, alreadyBooked, skipped, other });
+  return dayResults;
 }
