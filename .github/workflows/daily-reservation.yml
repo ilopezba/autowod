@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: 📥 Get latest code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 🗓️ Decide whether to run today
         id: schedule-gate
@@ -75,13 +75,13 @@ jobs:
 
       - name: 🔧 Set up Node.js
         if: steps.schedule-gate.outputs.should_run == 'true'
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
 
       - name: 💾 Cache pnpm store
         if: steps.schedule-gate.outputs.should_run == 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.pnpm-store
           key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
@@ -94,7 +94,7 @@ jobs:
 
       - name: 💾 Cache Puppeteer browser
         if: steps.schedule-gate.outputs.should_run == 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/puppeteer
           key: puppeteer-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
@@ -108,7 +108,7 @@ jobs:
       - name: 📋 Restore booking state
         if: steps.schedule-gate.outputs.should_run == 'true'
         id: booking-state-restore
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: booking-state.json
           key: booking-state-${{ runner.os }}-${{ github.run_id }}
@@ -136,7 +136,7 @@ jobs:
 
       - name: 💾 Save booking state
         if: ${{ always() && steps.schedule-gate.outputs.should_run == 'true' }}
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: booking-state.json
           key: booking-state-${{ runner.os }}-${{ github.run_id }}
