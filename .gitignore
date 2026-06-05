@@ -46,3 +46,4 @@ debug/
 
 # Booking state (persisted via GitHub Actions cache, not committed)
 booking-state.json
+.harness/
