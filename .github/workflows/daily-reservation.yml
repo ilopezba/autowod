@@ -118,6 +118,9 @@ jobs:
       - name: 🎯 Run booking script
         if: steps.schedule-gate.outputs.should_run == 'true'
         env:
+          TZ: 'Europe/Madrid'
+          LANG: 'es_ES.UTF-8'
+          LC_ALL: 'es_ES.UTF-8'
           # Secrets (coincidiendo exactamente con los que creamos)
           URL: ${{ secrets.WODBUSTER_URL }}
           EMAIL: ${{ secrets.WODBUSTER_EMAIL }}
