@@ -137,14 +137,17 @@ jobs:
           SUNDAY: ${{ vars.SUNDAY }}
           AVAILABLE_DAYS: ${{ inputs.available_days || vars.AVAILABLE_DAYS }}
         run: pnpm start
-      - name: 📸 Guardar captura de pantalla 
+      - name: 📸 Guardar captura de pantalla si falla
+        if: always()  # Redoblamos la apuesta: que intente buscar fotos pase lo que pase
         uses: actions/upload-artifact@v4
         with:
           name: screenshot-error
           path: |
-            *.png
-            screenshots/
-            error/
+            **/*.png
+            **/*.jpg
+            **/screenshots/
+          if-no-files-found: warn
+          
       - name: 💾 Save booking state
         if: ${{ always() && steps.schedule-gate.outputs.should_run == 'true' }}
         uses: actions/cache/save@v5
