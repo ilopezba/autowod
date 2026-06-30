@@ -5,8 +5,8 @@ on:
   schedule:
     # Runs twice to cover both Spain summer (CEST, UTC+2) and winter (CET, UTC+1) time.
     # One of these will always land around 22:30 local time.
-    - cron: '31 20 * * *'
-    - cron: '31 21 * * *'
+    - cron: 5 0 * * *'
+    - cron: 5 1 * * *'
 
   # Run it manually from the Actions tab whenever you need to.
   # Useful when your gym opens the whole week at once — trigger once and
@@ -22,7 +22,7 @@ on:
 concurrency:
   group: reservation
   cancel-in-progress: false
-
+ñ
 jobs:
   book-session:
     name: Book Workout Session
