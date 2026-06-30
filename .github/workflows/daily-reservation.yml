@@ -4,9 +4,9 @@ run-name: "🏋️ AutoWOD – ${{ github.event_name == 'workflow_dispatch' && '
 on:
   schedule:
     # Runs twice to cover both Spain summer (CEST, UTC+2) and winter (CET, UTC+1) time.
-    # One of these will always land around 22:30 local time.
-    - cron: 5 0 * * *'
-    - cron: 5 1 * * *'
+    # Land around 2:05 AM local time for 2:10 AM booking opening.
+    - cron: '20 0 * * *'
+    - cron: '20 1 * * *'
 
   # Run it manually from the Actions tab whenever you need to.
   # Useful when your gym opens the whole week at once — trigger once and
@@ -22,7 +22,7 @@ on:
 concurrency:
   group: reservation
   cancel-in-progress: false
-ñ
+
 jobs:
   book-session:
     name: Book Workout Session
@@ -118,12 +118,13 @@ jobs:
       - name: 🎯 Run booking script
         if: steps.schedule-gate.outputs.should_run == 'true'
         env:
-          # Secrets (sensitive — set in Settings → Secrets and variables → Actions → Secrets tab)
-          EMAIL: ${{ secrets.EMAIL }}
-          PASSWORD: ${{ secrets.PASSWORD }}
+          # Secrets (coincidiendo exactamente con los que creamos)
+          URL: ${{ secrets.WODBUSTER_URL }}
+          EMAIL: ${{ secrets.WODBUSTER_EMAIL }}
+          PASSWORD: ${{ secrets.WODBUSTER_PASSWORD }}
           TWO_CAPTCHA_API_KEY: ${{ secrets.TWO_CAPTCHA_API_KEY }}
 
-          # Variables (set in Settings → Secrets and variables → Actions → Variables tab)
+          # Variables (las configurarás en la pestaña Variables si lo necesitas)
           MONDAY: ${{ vars.MONDAY }}
           TUESDAY: ${{ vars.TUESDAY }}
           WEDNESDAY: ${{ vars.WEDNESDAY }}
@@ -140,3 +141,4 @@ jobs:
         with:
           path: booking-state.json
           key: booking-state-${{ runner.os }}-${{ github.run_id }}
+          
